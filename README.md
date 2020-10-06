@@ -14,11 +14,11 @@ demo_0.py
 
 
 ### Breakout
-You now have an opportunity to try out this process. 
-* everyone will go in into breakout rooms with 2-3 students. 
-* Students should take about 5 minutes and come up with a problem or question that can be shared in the cohort's help channel (one question per breakout room). 
+You now have an opportunity to try out this process.
+* everyone will go in into breakout rooms with 2-3 students.
+* Students should take about 5 minutes and come up with a problem or question that can be shared in the cohort's help channel (one question per breakout room).
 * Can be general programming questions, doesn't need to be specific to this sprint.
-* After you post a question, each room should pick a question and attempt to answer it in a thread. They should ask questions as needed and the original posters should be monitoring and responding as needed. 
+* After you post a question, each room should pick a question and attempt to answer it in a thread. They should ask questions as needed and the original posters should be monitoring and responding as needed.
     * This may take 5-10 minutes, monitor activity to determine how much time to use.
     * students can follow up and attempt to answer questions after class to save time.
 
