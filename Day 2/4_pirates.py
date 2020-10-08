@@ -1,61 +1,148 @@
 '''After escaping the pirate's cave without drowning, you stumble upon a
 field where it's rumored a lot of gold can be found. You even have a map that
 shows where all of the biggest hauls are located!
-Unfortunately, the sun is going down, so you don't have a ton of time to 
-search. You decide to take one quick pass through the field. You choose 
+Unfortunately, the sun is going down, so you don't have a ton of time to
+search. You decide to take one quick pass through the field. You choose
 only to move one of three ways:
 -diagonally northeast
 -diagonally southeast
 -straight east
-If you start at the northwest corner of the field, how should you move to 
+If you start at the northwest corner of the field, how should you move to
 maximize the gold you collect?
-Can you write a function that finds the best path through a square  
+Can you write a function that finds the best path through a square
 field of any size?
-Ex. 
+Ex.
                 N
 Input =    [[2, 4, 1],
         W   [0, 3, 2],    E
-            [1, 2, 6] 
+            [1, 2, 6]
             ]
                 S
 Output = '27.098 can be acquired by moving
-['se', 'se']'  
-(based on the Gold Mine Problem at 
+['se', 'se']'
+(based on the Gold Mine Problem at
 https://www.geeksforgeeks.org/gold-mine-problem/?ref=lbp)
 '''
 
 import random
 import time
-from itertools import product 
+from itertools import product
 
 def naive_scavenging(field):
-    '''This solution generates all possible sequences of directions we may 
-    move. Then, it sums up the values, counts how many sequences produce the 
-    target sum, and calculates the odds that someone rolling `n` dice will 
+    '''This solution generates all possible sequences of directions we may
+    move. Then, it sums up the values, counts how many sequences produce the
+    target sum, and calculates the odds that someone rolling `n` dice will
     end up with a sum equal to 3 times the number of dice.
     '''
-    # generate all possible permutations of 'ne', 'e' or 'se' movements 
+    # generate all possible permutations of 'ne', 'e' or 'se' movements
     # that get a person across the field
-    
+    list_of_perms = list(product(['ne', 'e', 'se'], repeat=len(field) - 1))
+
     # TODO - which function in Python's `itertools` module can we use
     # to generate all possible paths?
-    pass
+    output = ""
+    max_gold = 0
+
+    for perm in list_of_perms:
+        total_gold = field[0][0] # how we will access the field in 2d list notation
+        col = 0
+        row = 0
+
+        for direction in perm:
+            if direction == "se":
+                # break if it is impossible to move
+                if row >= len(field) - 1:
+                    break
+                else:
+                    row +=1
+            elif direction == "ne":
+                # break if it is impossible to move
+                if row >= 0:
+                    break
+                else:
+                    row -=1
+
+            # update position and add gold at the current coordinates
+            col += 1
+            total_gold += field[row][col] # 2d notation work backward
+
+        # after getting to the edge of the field, check if this path had more gold than prev path.
+        if total_gold > max_gold:
+            max_gold = total_gold
+            output = f"{max_gold} can be aquired by moving \t{perm}"
+
+    return output
 
 
-def dp_scavenging(field):
-    '''This function utilizes dynamic programming to reduce the number of 
-    duplicate calculations that are performed (compared to the naive 
+def dp_scavenging(field): # can solve as a graph problem
+    '''This function utilizes dynamic programming to reduce the number of
+    duplicate calculations that are performed (compared to the naive
     approach). After a coordinate is visited, we save both i) the max
     amount of gold that can be picked up from that coordinate and ii) the
     path you'd have to travel to pick up maximum gold from that point.
     Subpaths on the eastern side of the field that we visited multiple times
     in the naive approach are only visited once using dynamic programming.
     '''
-    pass
+    # nested loops
+    #              inner loop                   outer loop
+    gold_cache = [[0 for _ in range(len(field))] for _ in range(len(field))]
+    path_cache = [["" for _ in range(len(field))] for _ in range(len(field))]
+
+    field_length = len(field)
+
+    for col in range(field_length - 1, -1, -1):
+        for row in range(field_length):
+            east = 0
+            northeast = 0
+            southeast = 0
+
+            # look at gold collected if we chose east
+            if col != field_length - 1:
+                east = gold_cache[row][col + 1]
+
+            # look at the gold collected if we chose northeast
+            if row != 0 and col != field_length - 1:
+                northeast = gold_cache[row -1][col + 1]
+
+            # look at the gold collected if we chose southeast
+            if row != field_length -1 and col != field_length - 1:
+                southeast = gold_cache[row + 1][col + 1]
+
+            # update the cache with how much gold we collected from choosing
+            # the path that will lead to the most gold + the gold from location
+            # we are currently standing in
+            # my reasoning for not using a max function is so that my max can keep track
+            # of path used to find gold
+
+            # East
+            if east > northeast and east > southeast:
+                gold_cache[row][col] += field[row][col] + east
+                if col < field_length - 1:
+                    path_cache[row][col] += "e, " + path_cache[row][col + 1]
+
+            # Northeast
+            elif northeast > east and northeast > southeast:
+                gold_cache[row][col] += field[row][col] + northeast
+                if col < field_length - 1:
+                    path_cache[row][col] += "ne, " + path_cache[row - 1][col + 1]
+
+            # Southeast
+            else:
+                gold_cache[row][col] += field[row][col] + southeast
+                if col < field_length - 1 and row < field_length - 1:
+                    path_cache[row][col] += "se, " + path_cache[row + 1][col + 1]
+
+    # because we are required to start in the northwest corner,
+    # the max gold collected will be the val at [0][0] and the path start at [0][0]
+    num_gold = gold_cache[0][0]
+    path = path_cache[0][0].split(",")
+    path.pop()
+
+    return f"{num_gold} can be aquired by moving \t{path}"
 
 
 def print_field(field, label):
-    '''Helper function to display 2D fields  
+    '''Helper function to display 2D fields
     with gold at different coordinates
     '''
     print(label)

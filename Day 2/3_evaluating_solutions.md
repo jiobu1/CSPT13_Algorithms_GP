@@ -4,31 +4,31 @@ After escaping the pirate's cave without drowning, you stumble upon a
 field where it's rumored a lot of gold can be found. You even have a map that
 shows where all of the biggest deposits are located!
 
-Unfortunately, the sun is going down, so you don't have a ton of time to 
-search. You decide to take one quick pass through the field. You choose 
+Unfortunately, the sun is going down, so you don't have a ton of time to
+search. You decide to take one quick pass through the field. You choose
 only to move one of three ways:
 -diagonally northeast
 -diagonally southeast
 -straight east
 
-If you start at the northwest corner of the field, how should you move to 
+If you start at the northwest corner of the field, how should you move to
 maximize the gold you collect?
 
-Can you write a function that finds the best path through a square  
+Can you write a function that finds the best path through a square
 field of any size?
 
-Ex. 
+Ex.
                 N
 Input =    [[2, 4, 1],
         W   [0, 3, 2],    E
-            [1, 2, 6] 
+            [1, 2, 6]
             ]
                 S
 
 Output = '27.098 can be acquired by moving
-['se', 'se']'  
+['se', 'se']'
 
-(based on the Gold Mine Problem at 
+(based on the Gold Mine Problem at
 https://www.geeksforgeeks.org/gold-mine-problem/?ref=lbp)
 ```
 

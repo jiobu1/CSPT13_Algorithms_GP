@@ -22,7 +22,7 @@ from queue_arr import Queue
 
 def sliding_window_max(nums, k):
     max_vals = []
-    q = deques()
+    q = Queue()
     # remove all elems from a queue
 
     for i, n in enumerate(nums):
